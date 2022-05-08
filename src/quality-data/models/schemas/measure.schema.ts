@@ -7,11 +7,20 @@ export type MeasureDocument = Measure & Document;
 
 @Schema()
 export class Measure {
-    @Prop({ required: true, default: 'point' })
-    name: string;
+    @Prop({ required: true })
+    type: string;
+
+    @Prop({ required: true, min: 0 })
+    value: number;
+
+    @Prop({ required: true })
+    date: Date;
+
+    @Prop({ required: true, min: 0 })
+    period: number;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'GeoPoint' })
-    pint: GeoPoint;
+    point: GeoPoint;
 }
 
 export const MeasureSchema = SchemaFactory.createForClass(Measure);
