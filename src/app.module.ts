@@ -4,12 +4,14 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SensorsModule } from './sensors/sensors.module';
+import { QualityDataModule } from './quality-data/quality-data.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@air4me.frvrk.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`),
-    SensorsModule
+    SensorsModule,
+    QualityDataModule
   ],
   controllers: [AppController],
   providers: [AppService],
