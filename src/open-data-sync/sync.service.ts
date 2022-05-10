@@ -3,22 +3,20 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { OpenDataHubStationData } from './models/measure.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { GeoPoint, GeoPointDocument } from 'src/quality-data/models/schemas/geo-point.schema';
 import { Model } from 'mongoose';
-import { Measure, MeasureDocument, MeasureSchema } from 'src/quality-data/models/schemas/measure.schema';
+import { Measure, MeasureDocument, Point } from '../quality-data/models/schemas/measure.schema';
 //import { Station } from './models/station.model';
+
 
 @Injectable()
 export class SyncService {
 
     constructor(
         private httpService: HttpService,
-        @InjectModel(GeoPoint.name) private geoPointModel: Model<GeoPointDocument>,
         @InjectModel(Measure.name) private measureModel: Model<MeasureDocument>
-    ) {
-    }
+    ) { }
 
-    @Cron(CronExpression.EVERY_30_SECONDS)
+    @Cron(CronExpression.EVERY_10_SECONDS)
     async syncOpenDataHub() {
         Logger.debug("Sync Open Data Hub data");
 
@@ -41,36 +39,32 @@ export class SyncService {
                         const m = openDataHubMeasures[stationKey];
                         Logger.debug("Station " + stationKey);
 
-                        let geoPoint: GeoPoint = await this.geoPointModel.findOne({ name: stationKey });
-                        if (!geoPoint) {
-                            geoPoint = {
-                                name: stationKey,
-                                coordinates: [m.scoordinate.x, m.scoordinate.y]
-                            };
-                            Logger.debug("Create new GeoPoint: ", geoPoint);
-                            await this.geoPointModel.create(geoPoint);
-                        }
+                        const point: Point = {
+                            type: 'Point',
+                            coordinates: [m.scoordinate.x, m.scoordinate.y]
+                        };
 
                         Object.keys(m.sdatatypes).forEach(async (dataTypeKey) => {
                             const data = m.sdatatypes[dataTypeKey];
                             Logger.debug("Add measure for type " + dataTypeKey);
 
-                            measures.push({
-                                type: dataTypeKey,
-                                date: data.tmeasurements[0].mtransactiontime,
-                                period: data.tmeasurements[0].mperiod,
-                                point: geoPoint,
-                                value: data.tmeasurements[0].mvalue
-                            });
+                            measures.push(
+                                new this.measureModel({
+                                    type: dataTypeKey,
+                                    date: data.tmeasurements[0].mtransactiontime,
+                                    period: data.tmeasurements[0].mperiod,
+                                    value: data.tmeasurements[0].mvalue,
+                                    location: point,
+                                })
+                            );
                         });
-
 
                         await this.measureModel.insertMany(measures);
                         Logger.debug(`${measures.length} measured insert for station '${stationKey}'`);
 
                         resolve();
-                    } catch {
-                        reject();
+                    } catch (err) {
+                        reject(err);
                     }
                 })
                 );
@@ -81,7 +75,7 @@ export class SyncService {
             Logger.debug("Sync done!");
 
         } catch (err) {
-            Logger.error("Cannot fetch the data from the Open Data Hub: " + err?.message);
+            Logger.error("Cannot fetch the data from the Open Data Hub: ");
         }
     }
 
