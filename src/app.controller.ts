@@ -4,7 +4,7 @@ import { Controller, Get } from '@nestjs/common';
 export class AppController {
   constructor() { }
 
-  @Get()
+  @Get("hc")
   healthCheck(): string {
     return "ari4me backend ok";
   }
