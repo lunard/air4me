@@ -1,6 +1,5 @@
 import { Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SensorsModule } from './sensors/sensors.module';
@@ -20,7 +19,7 @@ import { OpenDataSyncModule } from './open-data-sync/open-data-sync.module';
     OpenDataSyncModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {
 }
