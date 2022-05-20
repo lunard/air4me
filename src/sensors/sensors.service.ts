@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Measure, MeasureDocument } from 'src/quality-data/models/schemas/measure.schema';
@@ -23,11 +23,12 @@ export class SensorsService {
         const result = (results as Measure[]).map((measure) => {
             return {
                 type: measure.type,
-                lat: measure.location.coordinates[0],
-                lon: measure.location.coordinates[1]
+                lat: measure.location.coordinates[1],
+                lon: measure.location.coordinates[0],
+                value: measure.value
             } as SensorResponse;
         });
-
+        console.log(result);
         return result;
     }
 }
