@@ -27,6 +27,7 @@
     "@nestjs/mongoose": "^9.0.3",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/schedule": "^1.1.0",
+    "moment": "^2.29.3",
     "mongoose": "^6.3.2",
     "nestjs-http-promise": "^1.2.2",
     "reflect-metadata": "^0.1.13",

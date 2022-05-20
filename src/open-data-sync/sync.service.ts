@@ -16,7 +16,7 @@ export class SyncService {
         @InjectModel(Measure.name) private measureModel: Model<MeasureDocument>
     ) { }
 
-    @Cron(CronExpression.EVERY_10_SECONDS)
+    @Cron(CronExpression.EVERY_HOUR)
     async syncOpenDataHub() {
         Logger.debug("Sync Open Data Hub data");
 
@@ -51,7 +51,7 @@ export class SyncService {
                             measures.push(
                                 new this.measureModel({
                                     type: dataTypeKey,
-                                    date: data.tmeasurements[0].mtransactiontime,
+                                    date: data.tmeasurements[0].mvalidtime,
                                     period: data.tmeasurements[0].mperiod,
                                     value: data.tmeasurements[0].mvalue,
                                     location: point,
