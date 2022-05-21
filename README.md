@@ -12,3 +12,12 @@ The backend has 3 main purposes:
 - provide a REST path for sending new sensor data to the MQTT broker of the NOI tech park
 - provide a REST path to query the Open Data Hub data synked into Mongo, in order to use geospatial query
 - provide a REST path to send data stored by the Flutter app when the smartphone was offline (bluk insert).. (todo)
+
+
+# Technologies
+The project is a Nest.js application, where the Mongoose is used as ORM
+The sync is made by using Cron task
+An MQTT ClientProxy is used to send data.
+
+# Docker
+The Dockerfile is provided: please ask me for the env file to pass to docker run (via --enf_file)
