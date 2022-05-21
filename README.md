@@ -16,7 +16,9 @@ The backend has 3 main purposes:
 
 # Technologies
 The project is a Nest.js application, where the Mongoose is used as ORM
+
 The sync is made by using Cron task
+
 An MQTT ClientProxy is used to send data.
 
 # Docker
