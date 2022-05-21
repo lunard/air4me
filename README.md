@@ -19,7 +19,7 @@ The project is a Nest.js application, where the Mongoose is used as ORM
 
 The sync is made by using Cron task
 
-An MQTT ClientProxy is used to send data.
+An MQTT ClientProxy is used to send data to the MQTT broker.
 
 # Docker
 The Dockerfile is provided: please ask me for the env file to pass to docker run (via --enf_file)
