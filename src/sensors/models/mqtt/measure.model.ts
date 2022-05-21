@@ -2,13 +2,15 @@ export class MqttMeasure {
 
     type: string;
     position: Position;
-    value: number;
+    TVOC: number;
+    eCO2: number;
     timestamp: Date;
 
-    constructor(type: string, latitude: number, longitude: number, value: number, timestamp?: Date) {
+    constructor(type: string, latitude: number, longitude: number, tvoc: number, eco2: number, timestamp?: Date) {
         this.type = type;
         this.position = new Position(latitude, longitude);
-        this.value = value;
+        this.TVOC = tvoc;
+        this.eCO2 = eco2;
 
         this.timestamp = timestamp ?? new Date();
     }

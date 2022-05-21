@@ -13,7 +13,10 @@ export class MeasureRequest {
     longitude: number;
 
     @IsNotEmpty()
-    value: number;
+    tvoc: number;
+
+    @IsNotEmpty()
+    eco2: number;
 
     timestamp: Date;
 }

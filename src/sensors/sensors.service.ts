@@ -37,8 +37,8 @@ export class SensorsService {
         return result;
     }
 
-    async sendMqttMeasure(type: string, latitude: number, longitude: number, value: number, timestamp?: Date) {
-        const message = new MqttMeasure(type, latitude, longitude, value, timestamp);
+    async sendMqttMeasure(type: string, latitude: number, longitude: number, tvoc: number, eco2: number, timestamp?: Date) {
+        const message = new MqttMeasure(type, latitude, longitude, tvoc, eco2, timestamp);
         Logger.debug(`Sending message to MQTT: ${JSON.stringify(message)}`);
         await this.mqttClient.emit(process.env.MQTT_TOPIC, message);
     }

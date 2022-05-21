@@ -19,6 +19,6 @@ export class SensorsController {
 
     @Post("measure")
     async sendMeasure(@Body() request: MeasureRequest) {
-        return await this.sensorService.sendMqttMeasure(request.type, request.latitude, request.longitude, request.value, request.timestamp);
+        return await this.sensorService.sendMqttMeasure(request.type, request.latitude, request.longitude, request.tvoc, request.eco2, request.timestamp);
     }
 }
