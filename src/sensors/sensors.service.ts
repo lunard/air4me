@@ -40,6 +40,6 @@ export class SensorsService {
     async sendMqttMeasure(type: string, latitude: number, longitude: number, value: number, timestamp?: Date) {
         const message = new MqttMeasure(type, latitude, longitude, value, timestamp);
         Logger.debug(`Sending message to MQTT: ${JSON.stringify(message)}`);
-        await this.mqttClient.emit('/open/hackathon-2022', message);
+        await this.mqttClient.emit(process.env.MQTT_TOPIC, message);
     }
 }
