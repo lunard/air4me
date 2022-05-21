@@ -1,12 +1,17 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Measure, MeasureDocument } from 'src/quality-data/models/schemas/measure.schema';
-import { SensorResponse } from './models/sensor-response.model';
+import { SensorResponse } from './models/rest/sensor-response.model';
 import * as moment from 'moment';
+import { ClientProxy } from '@nestjs/microservices';
+import { MqttMeasure } from './models/mqtt/measure.model';
 @Injectable()
 export class SensorsService {
-    constructor(@InjectModel(Measure.name) private measureModel: Model<MeasureDocument>) {
+    constructor(
+        @InjectModel(Measure.name) private measureModel: Model<MeasureDocument>,
+        @Inject("MqttClient") private mqttClient: ClientProxy) {
+        mqttClient.connect();
     }
 
     async getSensorsByPositionAndRadius(lat: number, lon: number, radius: number): Promise<SensorResponse[]> {
@@ -30,5 +35,11 @@ export class SensorsService {
         });
         console.log(result);
         return result;
+    }
+
+    async sendMqttMeasure(type: string, latitude: number, longitude: number, value: number, timestamp?: Date) {
+        const message = new MqttMeasure(type, latitude, longitude, value, timestamp);
+        Logger.debug(`Sending message to MQTT: ${JSON.stringify(message)}`);
+        await this.mqttClient.emit('/open/hackathon-2022', message);
     }
 }
