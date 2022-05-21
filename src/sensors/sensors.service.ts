@@ -23,7 +23,7 @@ export class SensorsService {
                     $maxDistance: Number(radius)
                 }
             },
-            date: { $gt: moment().subtract(1, 'days').toDate() },
+            date: { $gt: moment().subtract(2, 'days').toDate() },
         });
         const result = (results as Measure[]).map((measure) => {
             return {
@@ -33,7 +33,6 @@ export class SensorsService {
                 value: measure.value
             } as SensorResponse;
         });
-        console.log(result);
         return result;
     }
 
